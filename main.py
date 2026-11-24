@@ -4,18 +4,19 @@ import uuid
 from pathlib import Path
 
 # ====== CẤU HÌNH ======
-ROOT_PATH = "D:/"   # Thư mục gốc cần xử lý
+ROOT_PATH = "D:/"  
 
 # Chọn chế độ: 1, 2 hoặc 3
 #   1 = Viết Hoa Chữ Cái Đầu Mỗi Từ
 #   2 = Chỉ viết hoa chữ cái đầu của tên
 #   3 = Viết Hoa Chữ Cái Đầu Mỗi Từ
-CHE_DO = 1
+#   4 = VIẾT HOA TOÀN BỘ TÊN
+CHE_DO = 4
 
-# Các từ viết tắt giữ nguyên VIẾT HOA toàn bộ (để [] nếu không cần)
-GIU_NGUYEN = ["HĐND", "UBND", "TTPVHCC", "TTHC", "CNTT", "TTDVTH"]
 
-# Các thư mục giữ nguyên, không đổi tên (kể cả mọi thư mục con bên trong)
+GIU_NGUYEN = ["HĐND", "UBND", "TTPVHCC", "TTHC", "CNTT", "TTDVTH", "ĐU", "CAT"]
+
+
 BO_QUA = ["Code", "System Volume Information", "$RECYCLE.BIN"]
 # ======================
 
@@ -23,6 +24,7 @@ CAC_CHE_DO = {
     1: ("title", False),
     2: ("cau", False),
     3: ("title", False),
+    4: ("upper", False),
 }
 
 if CHE_DO not in CAC_CHE_DO:
@@ -34,6 +36,12 @@ BO_QUA_SET = {n.lower() for n in BO_QUA}
 
 
 def tao_ten_moi(name: str) -> str:
+    if KIEU == "upper":
+        return " ".join(
+            w.upper() if w.upper() in GIU_NGUYEN_SET else w.upper()
+            for w in name.split(" ")
+        )
+
     kq = []
     for w in name.lower().split(" "):
         if w == "":
@@ -44,6 +52,7 @@ def tao_ten_moi(name: str) -> str:
             kq.append(w[0].upper() + w[1:])
         else:
             kq.append(w)
+
     s = " ".join(kq)
     if KIEU == "cau" and s:
         s = s[0].upper() + s[1:]
